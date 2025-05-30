@@ -26,7 +26,7 @@ public class UserController {
         return apiResponse;
     }
 
-    @GetMapping
+    @GetMapping("/users")
     public List<UserResponse> getUsers(User user) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username: {}", authentication.getName());
