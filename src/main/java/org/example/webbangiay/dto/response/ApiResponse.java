@@ -1,4 +1,4 @@
-package org.example.webbangiay.dto.request;
+package org.example.webbangiay.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

@@ -4,28 +4,40 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.webbangiay.dto.request.PermissionRequest;
-import org.example.webbangiay.entity.Permission;
+import org.example.webbangiay.dto.request.RoleRequest;
+import org.example.webbangiay.entity.Role;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PermissionResponse {
+public class RoleResponse {
     private String name;
     private String description;
+    private Set<PermissionResponse> permissions;
 
-    public static PermissionResponse fromPermissionEntity(Permission permission) {
-        PermissionResponse pm = new PermissionResponse();
-        pm.setName(permission.getName());
-        pm.setDescription(permission.getDescription());
-        return pm;
+    public static RoleResponse fromRoleEntity(Role role) {
+        return RoleResponse.builder()
+                .name(role.getName())
+                .description(role.getDescription())
+                .permissions(
+                        role.getPermission() != null
+                                ? role.getPermission().stream()
+                                .map(PermissionResponse::fromPermissionEntity)
+                                .collect(Collectors.toSet())
+                                : null
+                )
+                .build();
     }
 
-    public static Permission toPermissionEntity(PermissionRequest request) {
-        Permission p = new Permission();
-        p.setName(request.getName());
-        p.setDescription(request.getDescription());
-        return p;
+
+    public static Role toRoleEntity(RoleRequest request) {
+        Role role = new Role();
+        role.setName(request.getName());
+        role.setDescription(request.getDescription());
+        return role;
     }
 }

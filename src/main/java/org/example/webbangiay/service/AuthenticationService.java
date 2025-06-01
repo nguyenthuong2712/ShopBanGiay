@@ -8,25 +8,29 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.example.webbangiay.dto.request.LogoutRequest;
 import org.example.webbangiay.dto.response.AuthenticationResponse;
 import org.example.webbangiay.dto.response.IntrospectResponse;
 import org.example.webbangiay.dto.request.AuthenticationRequest;
 import org.example.webbangiay.dto.request.IntrospectRequest;
+import org.example.webbangiay.entity.InvalidatedToken;
+import org.example.webbangiay.entity.Role;
 import org.example.webbangiay.entity.User;
 import org.example.webbangiay.exception.AppException;
 import org.example.webbangiay.exception.ErrorCode;
+import org.example.webbangiay.repository.InvalidatedTokenRepository;
 import org.example.webbangiay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -34,6 +38,7 @@ import java.util.StringJoiner;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final InvalidatedTokenRepository invalidatedTokenRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -41,21 +46,16 @@ public class AuthenticationService {
 
     public IntrospectResponse introspect(IntrospectRequest request)
             throws JOSEException, ParseException {
-
         var token = request.getToken();
-
-        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
-
-        SignedJWT signedJWT = SignedJWT.parse(token);
-
-        Date expiration = signedJWT.getJWTClaimsSet().getExpirationTime();
-
-        var verified = signedJWT.verify(verifier);
-
+        boolean isValid = true;
+        try {
+            verifyToken(token);
+        }catch (AppException e){
+            isValid = false;
+        }
         return IntrospectResponse.builder()
-                .valid(verified && expiration.after(new Date()))
+                .valid(isValid)
                 .build();
-
     }
 
 
@@ -78,6 +78,37 @@ public class AuthenticationService {
                 .build();
     }
 
+    public void logout (LogoutRequest request) throws ParseException, JOSEException {
+        var signToken = verifyToken(request.getToken());
+
+        String jit = signToken.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryTime(expiryTime)
+                .build();
+
+        invalidatedTokenRepository.save(invalidatedToken);
+    }
+
+    private SignedJWT verifyToken(String token) throws ParseException, JOSEException {
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        var verified = signedJWT.verify(verifier);
+
+        if (!(verified && expiryTime.after(new Date())))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        return signedJWT;
+    }
+
     private String generateToken(User user){
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
@@ -88,6 +119,7 @@ public class AuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
 
@@ -104,10 +136,14 @@ public class AuthenticationService {
         }
     }
     private String buildScope(User user){
-        StringJoiner stringJoiner = new StringJoiner("");
+        StringJoiner stringJoiner = new StringJoiner(" ");
         if (!CollectionUtils.isEmpty(user.getRoles()))
-            user.getRoles().forEach(stringJoiner::add);
-
+            user.getRoles().forEach(role -> {
+                        stringJoiner.add("ROLE_" + role.getName());
+            if (!CollectionUtils.isEmpty(role.getPermission()))
+                role.getPermission().forEach(permission ->
+                    stringJoiner.add(permission.getName()));
+            });
         return stringJoiner.toString();
     }
 }

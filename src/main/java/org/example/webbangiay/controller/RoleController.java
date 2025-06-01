@@ -1,39 +1,39 @@
 package org.example.webbangiay.controller;
 
-
+import org.example.webbangiay.dto.request.RoleRequest;
 import org.example.webbangiay.dto.response.ApiResponse;
-import org.example.webbangiay.dto.request.PermissionRequest;
-import org.example.webbangiay.dto.response.PermissionResponse;
-import org.example.webbangiay.service.PermissionService;
+import org.example.webbangiay.dto.response.RoleResponse;
+import org.example.webbangiay.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/permission")
-public class PermissionController {
+@RequestMapping("/role")
+public class RoleController {
 
     @Autowired
-    private PermissionService permissionService;
+    private RoleService roleService;
 
     @PostMapping
-    public ApiResponse<PermissionResponse> create(@RequestBody PermissionRequest request){
-        return ApiResponse.<PermissionResponse>builder()
+    public ApiResponse<RoleResponse> createRole(@RequestBody RoleRequest request){
+        return ApiResponse.<RoleResponse>builder()
                 .code(1000)
-                .result(permissionService.create(request))
+                .result(roleService.createRole(request))
                 .build();
     }
     @GetMapping
-    public ApiResponse<List<PermissionResponse>> getAll(){
-        return ApiResponse.<List<PermissionResponse>>builder()
-                .result(permissionService.getAll())
+    public ApiResponse<List<RoleResponse>> getAllRoles(){
+        return ApiResponse.<List<RoleResponse>>builder()
+                .code(1000)
+                .result(roleService.getAllRoles())
                 .build();
     }
 
-    @DeleteMapping("/{permission}")
-    public ApiResponse<Void> delete (@PathVariable String permission){
-        permissionService.deletePermission(permission);
+    @DeleteMapping("/{role}")
+    public ApiResponse<Void> deleteRole(@PathVariable String role){
+        roleService.deleteRole(role);
         return ApiResponse.<Void>builder()
                 .code(1000)
                 .build();

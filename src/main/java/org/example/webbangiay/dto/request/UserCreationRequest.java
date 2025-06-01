@@ -3,6 +3,7 @@ package org.example.webbangiay.dto.request;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.example.webbangiay.validator.DobConstraint;
 
 
 @NoArgsConstructor
@@ -18,6 +19,8 @@ public class UserCreationRequest {
     String password;
     String firstName;
     String lastName;
+
+    @DobConstraint(min = 16, message = "INVALID_DOB")
     String dob;
 }
 

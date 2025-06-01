@@ -2,9 +2,10 @@ package org.example.webbangiay.controller;
 
 import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
+import org.example.webbangiay.dto.request.LogoutRequest;
 import org.example.webbangiay.dto.response.AuthenticationResponse;
 import org.example.webbangiay.dto.response.IntrospectResponse;
-import org.example.webbangiay.dto.request.ApiResponse;
+import org.example.webbangiay.dto.response.ApiResponse;
 import org.example.webbangiay.dto.request.AuthenticationRequest;
 import org.example.webbangiay.dto.request.IntrospectRequest;
 import org.example.webbangiay.service.AuthenticationService;
@@ -24,6 +25,7 @@ public class AuthenticationController {
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.authenticate(request);
         return ApiResponse.<AuthenticationResponse>builder()
+                .code(1000)
                 .result(result)
                 .build();
     }
@@ -33,7 +35,17 @@ public class AuthenticationController {
             throws ParseException, JOSEException {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
+                .code(1000)
                 .result(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> authenticate(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException {
+         authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
+                .code(1000)
                 .build();
     }
 

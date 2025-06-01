@@ -3,7 +3,7 @@ package org.example.webbangiay.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.example.webbangiay.dto.response.UserResponse;
-import org.example.webbangiay.dto.request.ApiResponse;
+import org.example.webbangiay.dto.response.ApiResponse;
 import org.example.webbangiay.dto.request.UserCreationRequest;
 import org.example.webbangiay.dto.request.UserUpdateRequest;
 import org.example.webbangiay.entity.User;
@@ -20,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/users")
-    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+    public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.creationUser(request));
         return apiResponse;
@@ -30,7 +30,6 @@ public class UserController {
     public List<UserResponse> getUsers(User user) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username: {}", authentication.getName());
-        log.info("Roles: {}", user.getRoles());
         authentication.getAuthorities()
                 .forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
         return userService.getUsers()
@@ -40,15 +39,30 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserResponse getUser(@PathVariable("userId") String userId) {
-        return userService.getUser(userId);
+    public ApiResponse <UserResponse> getUser(@PathVariable("userId") String userId) {
+        return ApiResponse.<UserResponse>builder()
+                .code(1000)
+                .result(userService.getUser(userId))
+                .build();
     }
+
+    @GetMapping("/myInfo")
+    public ApiResponse <UserResponse> getMyInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .code(1000)
+                .result(userService.getMyInfo())
+                .build();
+    }
+
     @PutMapping("/{userId}")
-    public UserResponse updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
-        return userService.updateUser(userId,request);
+    public ApiResponse <UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .code(1000)
+                .result(userService.updateUser(userId, request))
+                .build();
     }
     @DeleteMapping("/{userId}")
-    String deleteUser(@PathVariable String userId) {
+    public String deleteUser(@PathVariable String userId) {
         userService.deleteUser(userId);
         return "user delete has been";
     }

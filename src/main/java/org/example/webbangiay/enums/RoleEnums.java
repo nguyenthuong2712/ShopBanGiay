@@ -1,6 +1,6 @@
 package org.example.webbangiay.enums;
 
-public enum Role {
+public enum RoleEnums {
     ADMIN,
     USER
 }

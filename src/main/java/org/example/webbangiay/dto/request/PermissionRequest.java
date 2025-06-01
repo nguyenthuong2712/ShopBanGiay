@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class IntrospectRequest {
-    private String token;
+public class PermissionRequest {
+    private String name;
+    private String description;
 }

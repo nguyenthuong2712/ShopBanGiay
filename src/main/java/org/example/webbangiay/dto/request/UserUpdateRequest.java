@@ -2,6 +2,8 @@ package org.example.webbangiay.dto.request;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -11,4 +13,5 @@ public class UserUpdateRequest {
     private String firstName;
     private String lastName;
     private String dob;
+    private List<String> roles;
 }
