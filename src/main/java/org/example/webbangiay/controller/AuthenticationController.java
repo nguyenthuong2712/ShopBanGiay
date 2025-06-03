@@ -8,7 +8,7 @@ import org.example.webbangiay.dto.response.IntrospectResponse;
 import org.example.webbangiay.dto.response.ApiResponse;
 import org.example.webbangiay.dto.request.AuthenticationRequest;
 import org.example.webbangiay.dto.request.IntrospectRequest;
-import org.example.webbangiay.service.AuthenticationService;
+import org.example.webbangiay.service.authenticaton_service.AuthenticationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

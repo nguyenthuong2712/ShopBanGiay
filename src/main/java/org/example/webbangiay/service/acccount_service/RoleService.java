@@ -1,11 +1,9 @@
-package org.example.webbangiay.service;
+package org.example.webbangiay.service.acccount_service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.webbangiay.dto.request.RoleRequest;
-import org.example.webbangiay.dto.response.PermissionResponse;
 import org.example.webbangiay.dto.response.RoleResponse;
-import org.example.webbangiay.entity.Role;
 import org.example.webbangiay.repository.PermissionRepository;
 import org.example.webbangiay.repository.RoleRepository;
 import org.springframework.stereotype.Service;

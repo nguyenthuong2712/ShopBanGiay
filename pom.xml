@@ -12,7 +12,7 @@
 	<artifactId>identity-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>identity-service</name>
-	<description>identity-service</description>
+	<description>WebBanGiay</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -51,12 +51,16 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
-<!--	sua o day-->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
 			<version>12.6.1.jre11</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>5.7.1</version> <!-- hoặc phiên bản mới nhất -->
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

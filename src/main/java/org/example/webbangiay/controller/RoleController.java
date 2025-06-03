@@ -3,7 +3,7 @@ package org.example.webbangiay.controller;
 import org.example.webbangiay.dto.request.RoleRequest;
 import org.example.webbangiay.dto.response.ApiResponse;
 import org.example.webbangiay.dto.response.RoleResponse;
-import org.example.webbangiay.service.RoleService;
+import org.example.webbangiay.service.acccount_service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,14 +16,14 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @PostMapping
+    @PostMapping("/add-role")
     public ApiResponse<RoleResponse> createRole(@RequestBody RoleRequest request){
         return ApiResponse.<RoleResponse>builder()
                 .code(1000)
                 .result(roleService.createRole(request))
                 .build();
     }
-    @GetMapping
+    @GetMapping("/show-role")
     public ApiResponse<List<RoleResponse>> getAllRoles(){
         return ApiResponse.<List<RoleResponse>>builder()
                 .code(1000)

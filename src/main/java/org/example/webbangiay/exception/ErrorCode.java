@@ -15,6 +15,7 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006,"Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007,"you don't have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1008,"you age must be at least {min} years", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_FOUND(1009,"Product not found", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

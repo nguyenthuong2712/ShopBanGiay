@@ -1,4 +1,4 @@
-package org.example.webbangiay.service;
+package org.example.webbangiay.service.acccount_service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

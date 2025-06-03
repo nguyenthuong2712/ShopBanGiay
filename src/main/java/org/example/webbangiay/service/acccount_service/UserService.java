@@ -1,4 +1,4 @@
-package org.example.webbangiay.service;
+package org.example.webbangiay.service.acccount_service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,6 @@ public class UserService {
         HashSet<String> roles = new HashSet<>();
         roles.add(RoleEnums.USER.name());
 //        user.setRoles(roles);
-
         userRepository.save(user);
         return UserResponse.fromEntity(user);
     }

@@ -1,4 +1,4 @@
-package org.example.webbangiay.service;
+package org.example.webbangiay.service.authenticaton_service;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -14,7 +14,6 @@ import org.example.webbangiay.dto.response.IntrospectResponse;
 import org.example.webbangiay.dto.request.AuthenticationRequest;
 import org.example.webbangiay.dto.request.IntrospectRequest;
 import org.example.webbangiay.entity.InvalidatedToken;
-import org.example.webbangiay.entity.Role;
 import org.example.webbangiay.entity.User;
 import org.example.webbangiay.exception.AppException;
 import org.example.webbangiay.exception.ErrorCode;

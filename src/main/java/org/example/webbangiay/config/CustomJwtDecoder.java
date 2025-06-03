@@ -2,7 +2,7 @@ package org.example.webbangiay.config;
 
 import com.nimbusds.jose.JOSEException;
 import org.example.webbangiay.dto.request.IntrospectRequest;
-import org.example.webbangiay.service.AuthenticationService;
+import org.example.webbangiay.service.authenticaton_service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;

@@ -1,12 +1,10 @@
 package org.example.webbangiay.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +19,9 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal price;
-    private String image;
+    private Integer quantity;
     private Integer status;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Images> images;
 }

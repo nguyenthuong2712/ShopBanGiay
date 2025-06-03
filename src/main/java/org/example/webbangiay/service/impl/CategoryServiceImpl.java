@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
 @Service
-public class CategoryServiceIplm implements CategoryService {
+public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryrepository;
 
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -32,21 +33,53 @@ public class CategoryServiceIplm implements CategoryService {
     }
 
     @Override
-    public MessageResponse create(CategoryRequest request, String username) throws IOException, CsvValidationException {
+    public MessageResponse create(CategoryRequest request, String username)
+            throws IOException, CsvValidationException {
         Category category = new Category();
         category.setNameCategory(request.getNameCategory());
         category.setStatus(request.getStatus());
-        category.setCreateDate();
-        return null;
+        category.setCreateDate(timestamp);
+        categoryrepository.save(category);
+        return MessageResponse.builder()
+                .message("Thêm thành công")
+                .build();
     }
 
     @Override
-    public MessageResponse update(String id,CategoryRequest request, String username) throws IOException, CsvValidationException {
-        return null;
+    public MessageResponse update(String id,CategoryRequest request, String username)
+            throws IOException, CsvValidationException {
+        Optional<Category> categoryOptional = categoryrepository.findById(id);
+        if(categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            category.setNameCategory(request.getNameCategory());
+            category.setStatus(request.getStatus());
+            category.setUpdateDate(timestamp);
+            categoryrepository.save(category);
+            return MessageResponse.builder()
+                    .message("Cập nhật thành công")
+                    .build();
+        }else {
+            return MessageResponse.builder()
+                    .message("Không tìm thấy danh mục với ID: " + id)
+                    .build();
+        }
     }
 
     @Override
     public MessageResponse delete(String id) {
-        return null;
+        Optional<Category> categoryOptional = categoryrepository.findById(id);
+        if(categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            category.setStatus(2);
+            category.setUpdateDate(timestamp);
+            categoryrepository.save(category);
+            return MessageResponse.builder()
+                    .message("Xóa thành công")
+                    .build();
+        }else {
+            return MessageResponse.builder()
+                    .message("Không tìm thấy danh mục với ID: "+id)
+                    .build();
+        }
     }
 }

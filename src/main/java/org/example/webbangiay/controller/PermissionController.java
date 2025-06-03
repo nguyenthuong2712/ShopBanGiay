@@ -4,7 +4,7 @@ package org.example.webbangiay.controller;
 import org.example.webbangiay.dto.response.ApiResponse;
 import org.example.webbangiay.dto.request.PermissionRequest;
 import org.example.webbangiay.dto.response.PermissionResponse;
-import org.example.webbangiay.service.PermissionService;
+import org.example.webbangiay.service.acccount_service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +17,14 @@ public class PermissionController {
     @Autowired
     private PermissionService permissionService;
 
-    @PostMapping
+    @PostMapping("/add-permission")
     public ApiResponse<PermissionResponse> create(@RequestBody PermissionRequest request){
         return ApiResponse.<PermissionResponse>builder()
                 .code(1000)
                 .result(permissionService.create(request))
                 .build();
     }
-    @GetMapping
+    @GetMapping("/show-permission")
     public ApiResponse<List<PermissionResponse>> getAll(){
         return ApiResponse.<List<PermissionResponse>>builder()
                 .result(permissionService.getAll())
