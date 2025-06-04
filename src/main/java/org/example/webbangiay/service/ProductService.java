@@ -1,5 +1,6 @@
 package org.example.webbangiay.service;
 
+import org.example.webbangiay.dto.request.ProductRequest;
 import org.example.webbangiay.dto.request.ProductSearchForm;
 import org.example.webbangiay.dto.response.ProductResponse;
 
@@ -13,7 +14,7 @@ public interface ProductService {
 
     void deleteProduct(String id);
 
-    ProductResponse createProduct(ProductResponse productResponse);
+    ProductResponse createProduct(ProductRequest request);
 
-    ProductResponse updateProduct(ProductResponse productResponse);
+    ProductResponse updateProduct(String productId, ProductRequest request);
 }

@@ -1,6 +1,7 @@
 package org.example.webbangiay.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.webbangiay.dto.request.ProductRequest;
 import org.example.webbangiay.dto.request.ProductSearchForm;
 import org.example.webbangiay.dto.response.ApiResponse;
 import org.example.webbangiay.dto.response.ProductResponse;
@@ -41,23 +42,23 @@ public class ProductController {
     }
 
     @PostMapping("add-product")
-    public ApiResponse<ProductResponse> createProduct(@RequestBody ProductResponse productResponse) {
+    public ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest request) {
+        System.out.println("REQUEST BODY: " + request);
         return ApiResponse.<ProductResponse>builder()
                 .code(1000)
-                .result(productService.createProduct(productResponse))
+                .result(productService.createProduct(request))
                 .build();
     }
+
 
     @PutMapping("/{productId}")
     public ApiResponse<ProductResponse> updateProduct(
             @PathVariable String productId,
-            @RequestBody ProductResponse productResponse) {
-
-        productResponse.setId(productId);
+            @RequestBody ProductRequest productRequest) {
 
         return ApiResponse.<ProductResponse>builder()
                 .code(1000)
-                .result(productService.updateProduct(productResponse))
+                .result(productService.updateProduct(productId, productRequest))
                 .build();
     }
 

@@ -52,7 +52,7 @@ public class CartDetailServiceImpl implements CartDetailService {
         Product product = optProduct.get();
 
         // 4. Tìm chi tiết giỏ hàng đã có chưa
-        CartDetail cartDetail = cartDetailRepository.finByCartAndIdProduct_id(cart, productId);
+        CartDetail cartDetail = cartDetailRepository.findByCartAndProductId(cart, productId);
 
         if (cartDetail != null) {
             // Nếu đã có → cộng dồn số lượng
@@ -113,7 +113,7 @@ public class CartDetailServiceImpl implements CartDetailService {
 
     @Override
     public List<CartDetail> getCartDetail(String idCart) {
-        return cartDetailRepository.findByIdCart(idCart).stream()
+        return cartDetailRepository.findByCart_Id(idCart).stream()
                 .filter(cd -> cd.getStatus() == 1)
                 .toList();
     }

@@ -17,6 +17,7 @@ public class ProductResponse {
     private Integer status;
     private Integer quantity;
     private String image;
+    private String categoryId;
 
     public static ProductResponse fromProductEntity(Product product, Images images) {
         return ProductResponse
@@ -28,6 +29,7 @@ public class ProductResponse {
                 .price(product.getPrice())
                 .status(product.getStatus())
                 .image(images != null ? images.getImage() : null)
+                .categoryId(product.getCategory() != null ? product.getCategory().getId() : null)
                 .build();
     }
 

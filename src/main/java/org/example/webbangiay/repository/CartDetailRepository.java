@@ -44,7 +44,7 @@ List<Object[]> loadOnCartMoney(@Param("id") String id);
 """)
 List<Object[]>sumMoney(@Param("id") String id );
 
-CartDetail finByCartAndIdProduct_id(Cart cart, String idProduct);
-CartDetail finByCart(Cart cart);
-List<CartDetail> findByIdCart(String id);
+CartDetail findByCartAndProductId(Cart cart, String idProductId);
+//CartDetail finByCart(Cart cart);
+List<CartDetail> findByCart_Id(String cartId);
 }

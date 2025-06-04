@@ -1,13 +1,18 @@
 package org.example.webbangiay.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.webbangiay.dto.request.ProductRequest;
 import org.example.webbangiay.dto.request.ProductSearchForm;
 import org.example.webbangiay.dto.response.ProductResponse;
+import org.example.webbangiay.entity.Category;
 import org.example.webbangiay.entity.Images;
 import org.example.webbangiay.entity.Product;
 import org.example.webbangiay.exception.AppException;
 import org.example.webbangiay.exception.ErrorCode;
+import org.example.webbangiay.repository.CategoryRepository;
 import org.example.webbangiay.repository.ImagesRepository;
 import org.example.webbangiay.repository.ProductRepository;
 import org.example.webbangiay.service.ProductService;
@@ -24,9 +29,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository productRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
+
+    private final ProductRepository productRepository;
     private final ImagesRepository imagesRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public List<ProductResponse> getAllProducts(ProductSearchForm productSearchForm) {
@@ -61,40 +70,45 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductResponse createProduct(ProductResponse productResponse) {
+    public ProductResponse createProduct(ProductRequest request) {
+        System.out.println("CATEGORY ID: " + request.getCategoryId());
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+        category = entityManager.merge(category);
+
         Product product = Product.builder()
                 .id(UUID.randomUUID().toString())
-                .name(productResponse.getName())
-                .description(productResponse.getDescription())
-                .price(productResponse.getPrice())
-                .quantity(productResponse.getQuantity())
-                .status(productResponse.getStatus() != null ? productResponse.getStatus() : 1)
+                .name(request.getName())
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .quantity(request.getQuantity())
+                .status(request.getStatus() != null ? request.getStatus() : 1)
+                .category(category)
                 .build();
 
-        Product savedProduct = productRepository.save(product);
+        System.out.println("CategoryId: " + request.getCategoryId());
 
-        // Không có image mặc định khi tạo mới
+        Product savedProduct = productRepository.save(product);
+        System.out.println("SAVED PRODUCT: " + savedProduct);
+
         return ProductResponse.fromProductEntity(savedProduct, null);
     }
 
     @Override
     @Transactional
-    public ProductResponse updateProduct(ProductResponse productResponse) {
-        Product existingProduct = productRepository.findById(productResponse.getId())
+    public ProductResponse updateProduct(String productId, ProductRequest request) {
+        Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        // Update các field
-        existingProduct.setName(productResponse.getName());
-        existingProduct.setDescription(productResponse.getDescription());
-        existingProduct.setPrice(productResponse.getPrice());
-        existingProduct.setQuantity(productResponse.getQuantity());
-        existingProduct.setStatus(productResponse.getStatus());
+        existingProduct.setName(request.getName());
+        existingProduct.setDescription(request.getDescription());
+        existingProduct.setPrice(request.getPrice());
+        existingProduct.setQuantity(request.getQuantity());
+        existingProduct.setStatus(request.getStatus());
 
         Product updatedProduct = productRepository.save(existingProduct);
 
-        // Lấy image mặc định
-        Images defaultImage = imagesRepository.findByProduct_Id(productResponse.getId());
+        Images defaultImage = imagesRepository.findByProduct_Id(productId);
         return ProductResponse.fromProductEntity(updatedProduct, defaultImage);
     }
-
 }

@@ -24,7 +24,7 @@ public class CartDetail {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "idcard")
+    @JoinColumn(name = "idcart")
     @JsonManagedReference
     private Cart cart;
 
