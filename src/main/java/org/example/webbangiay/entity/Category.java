@@ -1,12 +1,11 @@
 package org.example.webbangiay.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @Getter
@@ -22,4 +21,15 @@ public class Category {
     private Integer status;
     private Date createDate;
     private Date updateDate;
+    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY )
+    @JsonManagedReference
+    private List<Product> products;
+
+    public Category(String id, String nameCategory, Integer status, Date createDate, Date updateDate) {
+        this.id = id;
+        this.nameCategory = nameCategory;
+        this.status = status;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+    }
 }

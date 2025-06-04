@@ -13,6 +13,8 @@ import java.util.List;
 public interface CategoryService {
     List<Category> getAll();
 
+    List<Category> getAllCategory(Integer status,String nameCategory,Integer pageNumber,Integer pageSize);
+
     Category findById(String id);
 
     MessageResponse create(CategoryRequest request,String username )throws IOException, CsvValidationException;

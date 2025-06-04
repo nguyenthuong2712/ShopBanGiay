@@ -1,19 +1,19 @@
 package org.example.webbangiay.service;
 
 import org.example.webbangiay.dto.request.ProductSearchForm;
-import org.example.webbangiay.dto.response.ProductDto;
+import org.example.webbangiay.dto.response.ProductResponse;
 
 import java.util.List;
 
 public interface ProductService {
 
-    List<ProductDto> getAllProducts(ProductSearchForm productSearchForm);
+    List<ProductResponse> getAllProducts(ProductSearchForm productSearchForm);
 
-    ProductDto getProductById(String id);
+    ProductResponse getProductById(String id);
 
     void deleteProduct(String id);
 
-    ProductDto createProduct(ProductDto productDto);
+    ProductResponse createProduct(ProductResponse productResponse);
 
-    ProductDto updateProduct(ProductDto productDto);
+    ProductResponse updateProduct(ProductResponse productResponse);
 }

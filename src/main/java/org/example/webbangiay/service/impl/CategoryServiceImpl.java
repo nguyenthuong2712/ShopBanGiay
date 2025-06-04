@@ -7,6 +7,9 @@ import org.example.webbangiay.dto.response.MessageResponse;
 import org.example.webbangiay.entity.Category;
 import org.example.webbangiay.repository.CategoryRepository;
 import org.example.webbangiay.service.CategoryService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -25,6 +28,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getAll() {
         return categoryrepository.findByStatus(1);
+    }
+
+    @Override
+    public List<Category> getAllCategory(Integer status, String nameCategory, Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        Page<Category> pagelist = categoryrepository.getAllCategories(status,nameCategory,pageable);
+        return pagelist.getContent();
     }
 
     @Override

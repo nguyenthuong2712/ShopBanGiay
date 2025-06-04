@@ -26,6 +26,18 @@ public class CategoryController {
                 .build();
     }
 
+    @GetMapping("/hien-thi")
+    public ApiResponse<List<Category>> getAllCategories(
+            @RequestParam(name = "nameCategory", required = false) String nameCategory,
+            @RequestParam(name = "status",required = false) Integer status,
+            @RequestParam(name = "pageNumber",defaultValue = "0") Integer pageNumber,
+            @RequestParam(name = "pageSize",defaultValue = "10") Integer pageSize) {
+        return ApiResponse.<List<Category>>builder()
+                .code(1000)
+                .result(categoryService.getAllCategory(status, nameCategory, pageNumber, pageSize))
+                .build();
+    }
+
     @GetMapping("/detail")
     public ApiResponse<Category> getCategoryDetail(@RequestParam String id) {
         Category category = categoryService.findById(id);

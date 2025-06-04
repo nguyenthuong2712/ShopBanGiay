@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
-public class ProductDto {
+public class ProductResponse {
     private String id;
     private String name;
     private String description;
@@ -18,8 +18,8 @@ public class ProductDto {
     private Integer quantity;
     private String image;
 
-    public static ProductDto fromProductEntity(Product product, Images images) {
-        return ProductDto
+    public static ProductResponse fromProductEntity(Product product, Images images) {
+        return ProductResponse
                 .builder()
                 .id(product.getId())
                 .name(product.getName())

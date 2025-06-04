@@ -3,7 +3,7 @@ package org.example.webbangiay.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.webbangiay.dto.request.ProductSearchForm;
 import org.example.webbangiay.dto.response.ApiResponse;
-import org.example.webbangiay.dto.response.ProductDto;
+import org.example.webbangiay.dto.response.ProductResponse;
 import org.example.webbangiay.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ApiResponse<List<ProductDto>> getAllProducts(
+    public ApiResponse<List<ProductResponse>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
@@ -26,38 +26,38 @@ public class ProductController {
                 .size(size)
                 .build();
 
-        return ApiResponse.<List<ProductDto>>builder()
+        return ApiResponse.<List<ProductResponse>>builder()
                 .code(1000)
                 .result(productService.getAllProducts(searchForm))
                 .build();
     }
 
     @GetMapping("/{productId}")
-    public ApiResponse<ProductDto> getProductById(@PathVariable String productId) {
-        return ApiResponse.<ProductDto>builder()
+    public ApiResponse<ProductResponse> getProductById(@PathVariable String productId) {
+        return ApiResponse.<ProductResponse>builder()
                 .code(1000)
                 .result(productService.getProductById(productId))
                 .build();
     }
 
     @PostMapping("add-product")
-    public ApiResponse<ProductDto> createProduct(@RequestBody ProductDto productDto) {
-        return ApiResponse.<ProductDto>builder()
+    public ApiResponse<ProductResponse> createProduct(@RequestBody ProductResponse productResponse) {
+        return ApiResponse.<ProductResponse>builder()
                 .code(1000)
-                .result(productService.createProduct(productDto))
+                .result(productService.createProduct(productResponse))
                 .build();
     }
 
     @PutMapping("/{productId}")
-    public ApiResponse<ProductDto> updateProduct(
+    public ApiResponse<ProductResponse> updateProduct(
             @PathVariable String productId,
-            @RequestBody ProductDto productDto) {
+            @RequestBody ProductResponse productResponse) {
 
-        productDto.setId(productId);
+        productResponse.setId(productId);
 
-        return ApiResponse.<ProductDto>builder()
+        return ApiResponse.<ProductResponse>builder()
                 .code(1000)
-                .result(productService.updateProduct(productDto))
+                .result(productService.updateProduct(productResponse))
                 .build();
     }
 
