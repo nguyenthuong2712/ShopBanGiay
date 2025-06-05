@@ -12,9 +12,9 @@ import java.util.List;
 @Setter
 @Builder
 @Entity
+@Table(name = "product")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String name;
     private String description;

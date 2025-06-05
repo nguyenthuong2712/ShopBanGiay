@@ -88,10 +88,14 @@ public class ProductServiceImpl implements ProductService {
 
         System.out.println("CategoryId: " + request.getCategoryId());
 
-        Product savedProduct = productRepository.save(product);
-        System.out.println("SAVED PRODUCT: " + savedProduct);
-
-        return ProductResponse.fromProductEntity(savedProduct, null);
+        try {
+            Product savedProduct = productRepository.save(product);
+            System.out.println("SAVED PRODUCT: " + savedProduct);
+            return ProductResponse.fromProductEntity(savedProduct, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AppException(ErrorCode.UNCATEGORIZED);
+        }
     }
 
     @Override
