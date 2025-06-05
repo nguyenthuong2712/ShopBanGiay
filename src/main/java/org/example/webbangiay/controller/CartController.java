@@ -13,7 +13,7 @@ public class CartController {
 
     private final CartService cartService;
 
-    @PutMapping("/update-user")
+    @PutMapping("/update-cart")
     public ApiResponse<MessageResponse> updateCartUser(
             @RequestParam String idCart,
             @RequestParam String idUser) {

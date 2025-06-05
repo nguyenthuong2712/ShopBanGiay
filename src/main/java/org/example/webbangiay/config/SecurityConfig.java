@@ -22,7 +22,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    public final String[] PUBLIC_ENDPOINTS = {"/users", "/au-th/token", "/au-th/introspect","/au-th/logout","/products"};
+    public final String[] PUBLIC_ENDPOINTS = {"/register","/au-th/token", "/au-th/introspect","/au-th/logout","/products"};
 
    @Autowired
    CustomJwtDecoder customJwtDecoder;

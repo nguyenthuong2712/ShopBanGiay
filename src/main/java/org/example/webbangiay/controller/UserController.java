@@ -7,6 +7,8 @@ import org.example.webbangiay.dto.response.ApiResponse;
 import org.example.webbangiay.dto.request.UserCreationRequest;
 import org.example.webbangiay.dto.request.UserUpdateRequest;
 import org.example.webbangiay.entity.User;
+import org.example.webbangiay.exception.AppException;
+import org.example.webbangiay.exception.ErrorCode;
 import org.example.webbangiay.service.acccount_service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +22,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.creationUser(request));
-        return apiResponse;
+    public ApiResponse<UserResponse> register(@RequestBody UserCreationRequest request) {
+            return ApiResponse.<UserResponse>builder()
+                    .code(1000)
+                    .result(userService.creationUser(request))
+                    .build();
     }
+
 
     @GetMapping("/users")
     public List<UserResponse> getUsers(User user) {

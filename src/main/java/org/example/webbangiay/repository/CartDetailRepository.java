@@ -11,40 +11,18 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CartDetailRepository extends JpaRepository<CartDetail, String> {
-// lấy giỏ hàng theo tài khoản và phân trang
-@Query("""
-    SELECT cd.id, i.image, p.name, cd.price, cd.quantity
-    FROM CartDetail cd
-    JOIN cd.product p
-    JOIN p.images i
-    JOIN cd.cart c
-    JOIN c.user u
-    WHERE i.isDefault = true AND c.status = 1 AND u.id = :id
-""")
-Page<Object[]>loadOnCart (@Param("id") String id, Pageable pageable);
 
-// Lấy giỏ hàng không phân trang
-@Query("""
-    SELECT cd.id, i.image, p.name, cd.price, cd.quantity
-    FROM CartDetail cd
-    JOIN cd.product p
-    JOIN p.images i
-    JOIN cd.cart c
-    JOIN c.user u
-    WHERE i.isDefault = true AND c.status = 1 AND u.id = :id
-""")
-List<Object[]> loadOnCartMoney(@Param("id") String id);
-//Tính tổng tiền
-@Query("""
-    SELECT cd.price, cd.quantity
-    FROM CartDetail cd
-    JOIN cd.cart c
-    JOIN c.user u
-    WHERE c.status = 1 AND u.id = :id
-""")
-List<Object[]>sumMoney(@Param("id") String id );
+    @Query("SELECT cd FROM CartDetail cd JOIN cd.cart c WHERE c.user.username = :username")
+     Page<CartDetail> findByCardDetail(@Param("username") String username, Pageable pageable);
 
-CartDetail findByCartAndProductId(Cart cart, String idProductId);
-//CartDetail finByCart(Cart cart);
-List<CartDetail> findByCart_Id(String cartId);
+    @Query(" SELECT cd FROM CartDetail cd JOIN cd.cart c WHERE c.status = 1 AND c.user.username = :username AND cd.status = 1" )
+    List<CartDetail> loadOnCartMoney(@Param("username") String username);
+
+    @Query("SELECT cd.price, cd.quantity FROM CartDetail cd JOIN cd.cart c WHERE c.user.username = :username")
+    List<Object[]> sumMoney(@Param("username") String username);
+
+
+ CartDetail findByCartAndProductId(Cart cart, String idProductId);
+
+    List<CartDetail> findByCart_Id(String cartId);
 }

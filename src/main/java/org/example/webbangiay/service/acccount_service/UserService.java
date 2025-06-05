@@ -56,7 +56,6 @@ public class UserService {
 
         HashSet<String> roles = new HashSet<>();
         roles.add(RoleEnums.USER.name());
-//        user.setRoles(roles);
         userRepository.save(user);
         return UserResponse.fromEntity(user);
     }

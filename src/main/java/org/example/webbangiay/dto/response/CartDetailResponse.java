@@ -18,7 +18,6 @@ public class CartDetailResponse {
     private Integer quantity;
 
     public static CartDetailResponse fromCartDetailEntity(CartDetail cartDetail) {
-        // Lấy ảnh mặc định
         List<Images> imagesList = cartDetail.getProduct().getImages();
         String imageUrl = imagesList.stream()
                 .filter(Images::getIsDefault)
@@ -34,4 +33,5 @@ public class CartDetailResponse {
                 .image(imageUrl)
                 .build();
     }
+
 }

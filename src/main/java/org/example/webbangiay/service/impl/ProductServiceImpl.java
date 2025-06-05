@@ -71,7 +71,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponse createProduct(ProductRequest request) {
-        System.out.println("CATEGORY ID: " + request.getCategoryId());
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         category = entityManager.merge(category);
@@ -86,16 +85,8 @@ public class ProductServiceImpl implements ProductService {
                 .category(category)
                 .build();
 
-        System.out.println("CategoryId: " + request.getCategoryId());
-
-        try {
             Product savedProduct = productRepository.save(product);
-            System.out.println("SAVED PRODUCT: " + savedProduct);
             return ProductResponse.fromProductEntity(savedProduct, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new AppException(ErrorCode.UNCATEGORIZED);
-        }
     }
 
     @Override

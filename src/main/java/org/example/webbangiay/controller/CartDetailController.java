@@ -8,12 +8,14 @@ import org.example.webbangiay.entity.CartDetail;
 import org.example.webbangiay.service.CartDetailService;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cart-details")
 @RequiredArgsConstructor
+@RequestMapping("/cart-detail")
 public class CartDetailController {
+
 
     private final CartDetailService cartDetailService;
 
@@ -22,37 +24,39 @@ public class CartDetailController {
             @RequestParam String cartId,
             @RequestParam String productId,
             @RequestParam Integer quantity,
-            @RequestParam String username) {
+            Principal principal) {
+
         return ApiResponse.<MessageResponse>builder()
                 .code(1000)
-                .result(cartDetailService.addProductInCartDetail(cartId, productId, quantity, username))
+                .result(cartDetailService.addProductInCartDetail(cartId, productId, quantity, principal.getName()))
                 .build();
     }
 
     @GetMapping("/load")
     public ApiResponse<List<CartResponse>> loadCart(
-            @RequestParam String userId,
+            Principal principal,
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize) {
+
         return ApiResponse.<List<CartResponse>>builder()
                 .code(1000)
-                .result(cartDetailService.loadCart(userId, pageNumber, pageSize))
+                .result(cartDetailService.loadCart(principal.getName(), pageNumber, pageSize))
                 .build();
     }
 
     @GetMapping("/load-money")
-    public ApiResponse<List<CartResponse>> loadCartMoney(@RequestParam String id) {
+    public ApiResponse<List<CartResponse>> loadCartMoney(Principal principal) {
         return ApiResponse.<List<CartResponse>>builder()
                 .code(1000)
-                .result(cartDetailService.loadCartMoney(id))
+                .result(cartDetailService.loadCartMoney(principal.getName()))
                 .build();
     }
 
     @GetMapping("/total-price")
-    public ApiResponse<String> totalPrice(@RequestParam String id) {
+    public ApiResponse<String> totalPrice(Principal principal) {
         return ApiResponse.<String>builder()
                 .code(1000)
-                .result(cartDetailService.totalPrice(id))
+                .result(cartDetailService.totalPrice(principal.getName()))
                 .build();
     }
 
@@ -67,11 +71,13 @@ public class CartDetailController {
     @DeleteMapping("/delete")
     public ApiResponse<Void> deleteProductInCart(
             @RequestParam String id,
-            @RequestParam String username) {
-        cartDetailService.deleteProductInCart(id, username);
+            Principal principal) {
+
+        cartDetailService.deleteProductInCart(id, principal.getName());
         return ApiResponse.<Void>builder()
                 .code(1000)
                 .message("Đã xóa sản phẩm khỏi giỏ hàng")
                 .build();
     }
 }
+

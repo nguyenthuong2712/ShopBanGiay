@@ -24,6 +24,10 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Images> images;
+    @ManyToOne
+
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
